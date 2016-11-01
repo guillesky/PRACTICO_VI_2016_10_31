@@ -6,7 +6,7 @@ package sinonimos;
  * @author spinelli
  */
 
-
+//cambio, muchos muchos cambios
 import javax.swing.JButton;
 
 import javax.swing.JTable;

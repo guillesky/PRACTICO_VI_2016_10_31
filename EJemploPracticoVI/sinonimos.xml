@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.8.0_51" class="java.beans.XMLDecoder">
+ <object class="sinonimos.Diccionario" id="Diccionario0">
+  <void property="listaSinonimos">
+   <void method="add">
+    <object class="sinonimos.Sinonimo">
+     <void property="palabra_clave">
+      <string>casa</string>
+     </void>
+     <void property="sinonimo_clave">
+      <string>hogar</string>
+     </void>
+    </object>
+   </void>
+  </void>
+ </object>
+</java>
