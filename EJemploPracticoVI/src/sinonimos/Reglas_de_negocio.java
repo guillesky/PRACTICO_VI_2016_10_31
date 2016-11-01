@@ -1,19 +1,36 @@
 package sinonimos;
 
+import java.io.FileNotFoundException;
+
 import java.util.Iterator;
 
 import javax.swing.table.DefaultTableModel;
 
 public class Reglas_de_negocio
 {
-    private Persistencia persis = Persistencia.getInstancia();
-    private Diccionario diccsin = persis.despersitir();
-    private DefaultTableModel ModeloSinonimos = new DefaultTableModel();
+  
+    private Diccionario diccsin;
+   
     private OptionPane optionPane = new DefaultOptionPane();
 
     public Reglas_de_negocio()
     {
         super();
+        try
+        {
+            diccsin = Persistencia.despersitir();
+        } catch (FileNotFoundException e)
+        {
+            this.diccsin=new Diccionario();
+            try
+            {
+                Persistencia.persistir(diccsin);
+            } catch (FileNotFoundException f)
+            {this.optionPane.showMessageDialog(null, e.getMessage());
+            }
+
+            
+        }
     }
 
     public void setOptionPane(OptionPane o)
@@ -37,7 +54,7 @@ public class Reglas_de_negocio
         try
         {
             diccsin.agregar_sinonimo(sin);
-            persis.persistir(diccsin);
+            Persistencia.persistir(diccsin);
             optionPane.showMessageDialog(null, "No Excepcion");
         }
         catch (Exception e)
@@ -52,7 +69,7 @@ public class Reglas_de_negocio
         try
         {
             diccsin.eliminar_sinonimo(sin);
-            persis.persistir(diccsin);
+            Persistencia.persistir(diccsin);
             optionPane.showMessageDialog(null, "No Excepcion");
         }
         catch (Exception e)
@@ -62,7 +79,7 @@ public class Reglas_de_negocio
     }
 
     public DefaultTableModel leosinonimo(String Clave)
-    {
+    {  DefaultTableModel ModeloSinonimos = new DefaultTableModel();
         ModeloSinonimos.addColumn("Palabra");
         ModeloSinonimos.addColumn("Sinonimos");
         try

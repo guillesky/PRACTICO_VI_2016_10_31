@@ -134,7 +134,7 @@ public class Reglas_de_negocioTest1 {
     public void testLeosinonimo2() {
         rgFixture1.rg.setOptionPane(new MockOptionPane());
         Boolean prueba=rgFixture1.rg.leosinonimo("perro").getRowCount()==1;
-        Assert.assertTrue("No Detecto busqueda exitosa", prueba);
+        Assert.assertTrue("No Detecto busqueda exitosa ", prueba);
     }
     
 }

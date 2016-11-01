@@ -86,4 +86,32 @@ public class Diccionario
     {
         return ListaSinonimos;
     }
+
+    @Override
+    public boolean equals(Object object)
+    {
+        if (this == object)
+        {
+            return true;
+        }
+        if (!(object instanceof Diccionario))
+        {
+            return false;
+        }
+        final Diccionario other = (Diccionario) object;
+        if (!(ListaSinonimos == null ? other.ListaSinonimos == null : ListaSinonimos.equals(other.ListaSinonimos)))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        final int PRIME = 37;
+        int result = 1;
+        result = PRIME * result + ((ListaSinonimos == null) ? 0 : ListaSinonimos.hashCode());
+        return result;
+    }
 }

@@ -10,65 +10,31 @@ import java.io.FileOutputStream;
 public class Persistencia
 {
 
-    private static Persistencia instancia = null;
-
-    private Persistencia()
-    {
-        super();
-        FileOutputStream os;
-        try
-        {
-            os = new FileOutputStream("sinonimos.xml");
-            XMLEncoder encoder = new XMLEncoder(os);
-            encoder.writeObject(new Diccionario());
-            encoder.close();
-        }
-        catch (FileNotFoundException e)
-        {
-        }
-    }
-
-    public static Persistencia getInstancia()
-    {
-        if (instancia == null)
-        {
-            instancia = new Persistencia();
-        }
-        return instancia;
-    }
+   
 
 
-    public void persistir(Diccionario dic)
+    public static void persistir(Diccionario dic) throws FileNotFoundException
     {
         FileOutputStream os;
-        try
-        {
+       
             os = new FileOutputStream("sinonimos.xml");
             XMLEncoder encoder = new XMLEncoder(os);
             encoder.writeObject(dic);
             encoder.close();
-        }
-        catch (FileNotFoundException e)
-        {
-        }
+     
     }
 
-    public Diccionario despersitir()
+    public static Diccionario despersitir() throws FileNotFoundException
     {
         Diccionario dic;
         FileInputStream os;
-        try
-        {
+       
             os = new FileInputStream("sinonimos.xml");
             XMLDecoder decoder = new XMLDecoder(os);
             dic = (Diccionario) decoder.readObject();
             decoder.close();
             return dic;
-        }
-        catch (FileNotFoundException e)
-        {
-            return null;
-        }
+       
     }
 
 }

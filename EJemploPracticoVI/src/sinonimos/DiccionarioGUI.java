@@ -6,15 +6,14 @@ package sinonimos;
  * @author spinelli
  */
 
-//cambio, muchos muchos cambios
+
 import javax.swing.JButton;
 
 import javax.swing.JTable;
 
 import javax.swing.JTextField;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+
 
 import sinonimos.OptionPane;
 
@@ -246,6 +245,8 @@ public class DiccionarioGUI extends java.awt.Dialog
             (Texto_Busqueda.getText().isEmpty()))
         {
             regla_negocio.agregarsinonimo(Texto_Clave.getText(), Texto_Sinonimo.getText());
+            this.Texto_Clave.setText("");
+            this.Texto_Sinonimo.setText("");
             optionPane.showMessageDialog(null, "No Excepcion");
         }
         else
@@ -257,6 +258,8 @@ public class DiccionarioGUI extends java.awt.Dialog
             (Texto_Busqueda.getText().isEmpty()))
         {
             regla_negocio.eliminarsinonimo(Texto_Clave.getText(), Texto_Sinonimo.getText());
+            this.Texto_Clave.setText("");
+            this.Texto_Sinonimo.setText("");
             optionPane.showMessageDialog(null, "No Excepcion");
         }
         else
@@ -267,8 +270,11 @@ public class DiccionarioGUI extends java.awt.Dialog
         if ((Texto_Clave.getText().isEmpty()) & (Texto_Sinonimo.getText().isEmpty()) &
             (!Texto_Busqueda.getText().isEmpty()))
         {
-            this.Tabla_Sinonimos.setModel(regla_negocio.leosinonimo(Texto_Busqueda.getText()));
-            optionPane.showMessageDialog(null, "No Excepcion");
+            DefaultTableModel tabla=regla_negocio.leosinonimo(Texto_Busqueda.getText());
+            if(tabla!=null){
+            this.Tabla_Sinonimos.setModel(tabla);
+            this.Texto_Busqueda.setText("");
+            optionPane.showMessageDialog(null, "No Excepcion");}
         }
         else
             optionPane.showMessageDialog(null, "Busqueda con datos inconsistentes");

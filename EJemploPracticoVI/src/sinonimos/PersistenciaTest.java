@@ -7,6 +7,10 @@ package sinonimos;
  * ======================================================================================
  */
 
+import java.io.File;
+
+import java.io.FileNotFoundException;
+
 import junit.framework.JUnit4TestAdapter;
 
 import org.junit.After;
@@ -19,9 +23,7 @@ import org.junit.runner.JUnitCore;
 
 public class PersistenciaTest
 {
-
-    Reglas_de_negocio rg = new Reglas_de_negocio();
-
+    Diccionario dic;
     public PersistenciaTest()
     {
     }
@@ -35,6 +37,10 @@ public class PersistenciaTest
     @Before
     public void setUp() throws Exception
     {
+                dic=new Diccionario();
+        File archivo = new File("sinonimos.xml");
+        if (archivo.exists())archivo.delete(); 
+                    
     }
 
     @After
@@ -43,59 +49,95 @@ public class PersistenciaTest
 
     }
 
-    @BeforeClass
-    public static void setUpBeforeClass()
-    {
-    }
-
-    @AfterClass
-    public static void tearDownAfterClass() throws Exception
-    {
-
-    }
+  
 
     public static junit.framework.Test suite()
     {
         return new JUnit4TestAdapter(PersistenciaTest.class);
     }
 
-    /**
-     * @see Persistencia#getInstancia()
-     */
+   
+
     @Test
-    public void testGetInstancia()
+    public void testCrearArchivo()
     {
-        Persistencia persis = Persistencia.getInstancia();
-        Assert.assertNotNull("No se pudo instanciar mecanismo de persistencia", persis);
+        try
+        {
+            Persistencia.persistir(dic);
+            File archivo = new File("sinonimos.xml");
+            Assert.assertTrue("Debería existir el archivo sinonimos.xml",archivo.exists());
+                
+        } catch (FileNotFoundException e)
+        {
+            Assert.fail("No debería lanzar excepcion: "+e.getMessage());
+        }
     }
 
-    /**
-     * @see persistencia#persistir(diccionario)
-     */
-
     @Test
-    public void testPersistir()
+    public void testDiccionarioVacioArchivo()
     {
-        Persistencia persis = Persistencia.getInstancia();
-        rg.agregarsinonimo("uno", "dos");
-        rg.agregarsinonimo("uno", "tres");
-        Diccionario dicpersis = persis.despersitir();
-        Assert.assertNotEquals("Persistencia incorrecta (alta) Memoria > Disco", rg.getDiccionario(), dicpersis);
-        rg.eliminarsinonimo("uno", "dos");
-        rg.eliminarsinonimo("uno", "tres");
-        dicpersis = persis.despersitir();
-        Assert.assertNotEquals("Persistencia incorrecta (baja) Memoria > Disco", rg.getDiccionario(), dicpersis);
+        try
+        {
+            Persistencia.persistir(dic);
+            Diccionario diccionario2=Persistencia.despersitir();
+           
+            Assert.assertEquals("Los diccionarios deberían ser vacíos", this.dic, diccionario2);
+               
+        } catch (FileNotFoundException e)
+        {
+            Assert.fail("No debería lanzar excepcion: "+e.getMessage());
+        }
+
     }
-
-    /**
-     * @see Persistencia#despersitir()
-     */
+    
+    
     @Test
-    public void testDespersitir()
+    public void testDiccionarioConSinonimos()
     {
-        Persistencia persis = Persistencia.getInstancia();
-        persis.persistir(rg.getDiccionario());
-        Diccionario dicpersis = persis.despersitir();
-        Assert.assertNotEquals("Persistencia incorrecta Disco > Memoria", rg.getDiccionario(), dicpersis);
+        try
+        {
+           this.llenaDiccionario(dic);
+            Persistencia.persistir(dic);
+            Diccionario diccionario2=Persistencia.despersitir();
+            
+            Assert.assertEquals("Los diccionarios deberían tener cuatro sinónimos", this.dic, diccionario2);
+                
+        } catch (FileNotFoundException e)
+        {
+            Assert.fail("No debería lanzar excepcion: "+e.getMessage());
+        }
+
+    }
+    
+        
+    @Test
+    public void testDespersitirSinArchivo()
+    {
+        try
+        {
+            dic = Persistencia.despersitir();
+            Assert.fail("Debría haber lanzado una excepcion de tipo FilaNotFound");
+        } catch (FileNotFoundException e)
+        {
+            
+        }
+        
+    
+    }
+    private void llenaDiccionario(Diccionario diccionario)
+    {
+        try
+        {
+            diccionario.agregar_sinonimo(new Sinonimo("casa", "hogar"));
+            diccionario.agregar_sinonimo(new Sinonimo("casa", "vivienda"));
+            diccionario.agregar_sinonimo(new Sinonimo("automovil", "coche"));
+            diccionario.agregar_sinonimo(new Sinonimo("automovil", "carro"));
+            
+        } catch (Exception e)
+        {
+            Assert.fail("no debería lanzar excepcion");
+        }
+
+
     }
 }
